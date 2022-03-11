@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 # creates an object of the flask class
 app = Flask(__name__)
@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/clifford')
 @app.route('/home')
 def Welcome():
-    return "Clifford's personal"
+    return render_template('index.html')
 
 
 if __name__ == "__main__":
