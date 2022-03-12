@@ -1,3 +1,4 @@
+from crypt import methods
 from flask import Flask, render_template,redirect, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -44,6 +45,22 @@ def new_post():
         return redirect('/posts')
     else:
         return render_template('new_post.html')
+
+
+@app.route('/posts', methods=['GET','POST'])
+def posts():
+    if request.method == 'POST':
+        post_title = request.form['title']
+        post_content = request.form['post']
+        post_author = request.form['author']
+        new_post = Blog(title=post_title, content=post_content,posted_by=post_author)
+        db.session.add(new_post)
+        db.session.commit()
+
+        return redirect('/posts')
+    else:
+        all_posts = Blog.query.order_by(Blog.posted_on).all()
+        return render_template('posts.html', posts=all_posts)
 
 if __name__ == "__main__":
     app.run(debug=True)
