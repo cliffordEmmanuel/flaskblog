@@ -62,6 +62,24 @@ def posts():
         all_posts = Blog.query.order_by(Blog.posted_on).all()
         return render_template('posts.html', posts=all_posts)
 
+@app.route('/posts/edit/<int:id>', methods=['GET','POST'])
+def edit(id):
+    to_edit = Blog.query.get_or_404(id)  # used this to avoid creashing when the post is not found.
+    if request.method == 'POST':
+        to_edit.title = request.form['title']
+        to_edit.author = request.form['author']
+        to_edit.content = request.form['post']
+        db.session.commit()
+        return redirect('/posts')
+    else:
+        return render_template('edit.html', post=to_edit)
+
+
+
+
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 
