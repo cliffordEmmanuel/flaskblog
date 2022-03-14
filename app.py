@@ -64,7 +64,7 @@ def posts():
 
 @app.route('/posts/edit/<int:id>', methods=['GET','POST'])
 def edit(id):
-    to_edit = Blog.query.get_or_404(id)  # used this to avoid creashing when the post is not found.
+    to_edit = Blog.query.get_or_404(id)  # used this to avoid crashing when the post is not found.
     if request.method == 'POST':
         to_edit.title = request.form['title']
         to_edit.author = request.form['author']
@@ -74,7 +74,12 @@ def edit(id):
     else:
         return render_template('edit.html', post=to_edit)
 
-
+@app.route('/posts/delete/<int:id>')
+def delete(id):
+    to_delete = Blog.query.get_or_404(id)
+    db.session.delete(to_delete)
+    db.session.commit()
+    return redirect('/posts')
 
 
 
